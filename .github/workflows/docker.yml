@@ -15,8 +15,12 @@ jobs:
       - name: Build Docker image
         run: docker build -t mi_app .
         
-      - name: Stop old image
-        run: docker rm -f mi_app || true
-
-      - name: Deploy (simulacion)
-        run: docker run -d -p 8080:80 mi_app 
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: 192.168.18.180
+          username: devops
+          key: ${{ secrets.SSH_KEY}}
+          script: |
+            docker rm -f mi_app || true
+            docker run -d -p 8080:80 mi_app
