@@ -12,9 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Build Docker image
-        run: docker build -t mi_app .
-        
       - name: Deploy to Server
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -23,5 +20,7 @@ jobs:
           username: devops
           key: ${{ secrets.SSH_KEY}}
           script: | 
+            cd /home/devops/devops-lab
+            docker build -t mi_app .
             docker rm -f mi_app || true
-            docker run -d -p 8080:80 mi_app
+            docker run -d -p 8080:80 --name mi_app mi_app
