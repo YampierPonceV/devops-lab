@@ -18,9 +18,10 @@ jobs:
       - name: Deploy to Server
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: 192.168.18.180
+          host: 0.tcp.sa.ngrok.io
+          port: 18273
           username: devops
           key: ${{ secrets.SSH_KEY}}
-          script: |
+          script: | 
             docker rm -f mi_app || true
             docker run -d -p 8080:80 mi_app
